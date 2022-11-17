@@ -350,7 +350,8 @@ public final class Builder {
 
         if (clickActivity == null)
             return;
-
+        
+        
         Intent intent = new Intent(context, clickActivity)
                 .putExtra(Notification.EXTRA_ID, options.getId())
                 .putExtra(Action.EXTRA_ID, Action.CLICK_ACTION_ID)
@@ -361,10 +362,7 @@ public final class Builder {
             intent.putExtras(extras);
         }
 
-        int reqCode = random.nextInt();
-
-        PendingIntent contentIntent = PendingIntent.getService(
-                context, reqCode, intent, FLAG_UPDATE_CURRENT);
+        PendingIntent contentIntent = getPendingIntent(intent);
 
         builder.setContentIntent(contentIntent);
     }
@@ -413,8 +411,7 @@ public final class Builder {
 
         int reqCode = random.nextInt();
 
-        return PendingIntent.getService(
-                context, reqCode, intent, FLAG_UPDATE_CURRENT);
+        return getPendingIntent(intent);
     }
 
     /**
