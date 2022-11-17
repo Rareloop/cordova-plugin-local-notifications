@@ -176,7 +176,6 @@ public final class Notification {
 
       return PendingIntent.getBroadcast(
           context, 0, intent, FLAG_CANCEL_CURRENT);
-
     }
 
     /**

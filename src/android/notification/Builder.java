@@ -305,6 +305,18 @@ public final class Builder {
         builder.setStyle(style);
     }
 
+    private PendingIntent getPendingIntent(Intent intent) {
+      int reqCode = random.nextInt();
+      
+      if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+        return PendingIntent.getBroadcast(
+          context, reqCode, intent, PendingIntent.FLAG_MUTABLE | FLAG_CANCEL_CURRENT);
+      }
+
+      return PendingIntent.getBroadcast(
+          context, reqCode, intent, FLAG_CANCEL_CURRENT);
+    }
+
     /**
      * Set intent to handle the delete event. Will clean up some persisted
      * preferences.
@@ -312,7 +324,6 @@ public final class Builder {
      * @param builder Local notification builder instance.
      */
     private void applyDeleteReceiver(NotificationCompat.Builder builder) {
-
         if (clearReceiver == null)
             return;
 
@@ -324,10 +335,7 @@ public final class Builder {
             intent.putExtras(extras);
         }
 
-        int reqCode = random.nextInt();
-
-        PendingIntent deleteIntent = PendingIntent.getBroadcast(
-                context, reqCode, intent, FLAG_UPDATE_CURRENT);
+        PendingIntent deleteIntent = getPendingIntent(intent);
 
         builder.setDeleteIntent(deleteIntent);
     }
