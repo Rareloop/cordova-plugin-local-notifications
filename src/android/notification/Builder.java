@@ -310,11 +310,11 @@ public final class Builder {
       
       if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
         return PendingIntent.getBroadcast(
-          context, reqCode, intent, PendingIntent.FLAG_MUTABLE | FLAG_CANCEL_CURRENT);
+          context, reqCode, intent, PendingIntent.FLAG_MUTABLE | FLAG_UPDATE_CURRENT);
       }
 
       return PendingIntent.getBroadcast(
-          context, reqCode, intent, FLAG_CANCEL_CURRENT);
+          context, reqCode, intent, FLAG_UPDATE_CURRENT);
     }
 
     /**
