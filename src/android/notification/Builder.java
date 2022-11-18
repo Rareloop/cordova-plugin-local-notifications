@@ -305,18 +305,6 @@ public final class Builder {
         builder.setStyle(style);
     }
 
-    private PendingIntent getPendingIntent(Intent intent) {
-      int reqCode = random.nextInt();
-      
-      if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
-        return PendingIntent.getBroadcast(
-          context, reqCode, intent, PendingIntent.FLAG_MUTABLE | FLAG_UPDATE_CURRENT);
-      }
-
-      return PendingIntent.getBroadcast(
-          context, reqCode, intent, FLAG_UPDATE_CURRENT);
-    }
-
     /**
      * Set intent to handle the delete event. Will clean up some persisted
      * preferences.
@@ -324,6 +312,7 @@ public final class Builder {
      * @param builder Local notification builder instance.
      */
     private void applyDeleteReceiver(NotificationCompat.Builder builder) {
+
         if (clearReceiver == null)
             return;
 
@@ -335,7 +324,7 @@ public final class Builder {
             intent.putExtras(extras);
         }
 
-        PendingIntent deleteIntent = getPendingIntent(intent);
+        PendingIntent deleteIntent = getPendingIntent(intent, FLAG_UPDATE_CURRENT);
 
         builder.setDeleteIntent(deleteIntent);
     }
@@ -350,8 +339,7 @@ public final class Builder {
 
         if (clickActivity == null)
             return;
-        
-        
+
         Intent intent = new Intent(context, clickActivity)
                 .putExtra(Notification.EXTRA_ID, options.getId())
                 .putExtra(Action.EXTRA_ID, Action.CLICK_ACTION_ID)
@@ -362,7 +350,9 @@ public final class Builder {
             intent.putExtras(extras);
         }
 
-        PendingIntent contentIntent = getPendingIntent(intent);
+        int reqCode = random.nextInt();
+
+        PendingIntent contentIntent = getPendingIntent(intent, FLAG_UPDATE_CURRENT);
 
         builder.setContentIntent(contentIntent);
     }
@@ -409,9 +399,17 @@ public final class Builder {
             intent.putExtras(extras);
         }
 
-        int reqCode = random.nextInt();
+        return getPendingIntent(intent, FLAG_UPDATE_CURRENT);
+    }
 
-        return getPendingIntent(intent);
+    private PendingIntent getPendingIntent(Intent intent, Int flag) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                return PendingIntent.getBroadcast(
+                context, reqCode, intent, PendingIntent.FLAG_MUTABLE | flag);
+            }
+
+        return PendingIntent.getBroadcast(
+                context, reqCode, intent, flag);
     }
 
     /**
