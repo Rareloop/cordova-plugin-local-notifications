@@ -403,6 +403,8 @@ public final class Builder {
     }
 
     private PendingIntent getPendingIntent(Intent intent, int flag) {
+        int reqCode = random.nextInt();
+        
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
                 return PendingIntent.getBroadcast(
                 context, reqCode, intent, PendingIntent.FLAG_MUTABLE | flag);
