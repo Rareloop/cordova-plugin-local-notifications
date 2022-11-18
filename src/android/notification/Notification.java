@@ -171,7 +171,7 @@ public final class Notification {
     private PendingIntent getPendingIntent(Intent intent, int flag) {    
       if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
         return PendingIntent.getBroadcast(
-          context, 0, intent, PendingIntent.FLAG_MUTABLE | flag);
+          context, 0, intent, flag | PendingIntent.FLAG_IMMUTABLE);
       }
 
       return PendingIntent.getBroadcast(
