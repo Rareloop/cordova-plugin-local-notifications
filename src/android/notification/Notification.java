@@ -30,9 +30,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.service.notification.StatusBarNotification;
-import androidx.core.app.NotificationCompat;
-import androidx.collection.ArraySet;
-import androidx.core.util.Pair;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.util.ArraySet;
+import android.support.v4.util.Pair;
 import android.util.Log;
 import android.util.SparseArray;
 
@@ -168,14 +168,16 @@ public final class Notification {
         return Type.SCHEDULED;
     }
 
-    private PendingIntent getPendingIntent(Intent intent) {
+    private PendingIntent getPendingIntent(Intent intent, Int flag) {
+      int reqCode = random.nextInt();
+      
       if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
         return PendingIntent.getBroadcast(
-          context, 0, intent, PendingIntent.FLAG_MUTABLE | FLAG_CANCEL_CURRENT);
+          context, reqCode, intent, PendingIntent.FLAG_MUTABLE | flag);
       }
 
       return PendingIntent.getBroadcast(
-          context, 0, intent, FLAG_CANCEL_CURRENT);
+          context, reqCode, intent, flag);
     }
 
     /**
@@ -229,7 +231,7 @@ public final class Notification {
             if (!date.after(new Date()) && trigger(intent, receiver))
                 continue;
 
-            PendingIntent pi = getPendingIntent(intent);
+            PendingIntent pi = getPendingIntent(intent, FLAG_CANCEL_CURRENT);
 
             try {
                 switch (options.getPrio()) {
@@ -315,7 +317,7 @@ public final class Notification {
         for (String action : actions) {
             Intent intent = new Intent(action);
 
-            PendingIntent pi = getPendingIntent(intent);
+            PendingIntent pi = getPendingIntent(intent, 0);
 
             if (pi != null) {
                 getAlarmMgr().cancel(pi);
@@ -500,3 +502,5 @@ public final class Notification {
     }
 
 }
+
+   
