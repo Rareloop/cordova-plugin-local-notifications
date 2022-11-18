@@ -324,7 +324,8 @@ public final class Builder {
             intent.putExtras(extras);
         }
 
-        PendingIntent deleteIntent = getPendingIntent(intent, FLAG_UPDATE_CURRENT);
+        PendingIntent deleteIntent =
+          LaunchUtils.getBroadcastPendingIntent(context, intent, notificationId);
 
         builder.setDeleteIntent(deleteIntent);
     }
@@ -352,7 +353,7 @@ public final class Builder {
 
         int reqCode = random.nextInt();
 
-        PendingIntent contentIntent = getPendingIntent(intent, FLAG_UPDATE_CURRENT);
+        LaunchUtils.getTaskStackPendingIntent(context, intent, notificationId);
 
         builder.setContentIntent(contentIntent);
     }
@@ -399,19 +400,7 @@ public final class Builder {
             intent.putExtras(extras);
         }
 
-        return getPendingIntent(intent, FLAG_UPDATE_CURRENT);
-    }
-
-    private PendingIntent getPendingIntent(Intent intent, int flag) {
-        int reqCode = random.nextInt();
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
-                return PendingIntent.getBroadcast(
-                context, reqCode, intent, flag | PendingIntent.FLAG_IMMUTABLE);
-            }
-
-        return PendingIntent.getBroadcast(
-                context, reqCode, intent, flag);
+        return return LaunchUtils.getTaskStackPendingIntent(context, intent, notificationId);
     }
 
     /**

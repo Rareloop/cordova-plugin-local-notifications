@@ -38,7 +38,7 @@ import static de.appplant.cordova.plugin.notification.action.Action.EXTRA_ID;
  * Abstract content receiver activity for local notifications. Creates the
  * local notification and calls the event functions for further proceeding.
  */
-abstract public class AbstractClickReceiver extends IntentService {
+abstract public class AbstractClickReceiver extends NotificationTrampolineActivity {
 
     // Holds a reference to the intent to handle.
     private Intent intent;
