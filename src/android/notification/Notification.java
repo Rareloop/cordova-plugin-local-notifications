@@ -168,16 +168,14 @@ public final class Notification {
         return Type.SCHEDULED;
     }
 
-    private PendingIntent getPendingIntent(Intent intent, int flag) {
-      int reqCode = random.nextInt();
-      
+    private PendingIntent getPendingIntent(Intent intent, int flag) {    
       if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
         return PendingIntent.getBroadcast(
-          context, reqCode, intent, PendingIntent.FLAG_MUTABLE | flag);
+          context, 0, intent, PendingIntent.FLAG_MUTABLE | flag);
       }
 
       return PendingIntent.getBroadcast(
-          context, reqCode, intent, flag);
+          context, 0, intent, flag);
     }
 
     /**
