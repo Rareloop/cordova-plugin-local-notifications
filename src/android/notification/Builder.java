@@ -402,7 +402,7 @@ public final class Builder {
         return getPendingIntent(intent, FLAG_UPDATE_CURRENT);
     }
 
-    private PendingIntent getPendingIntent(Intent intent, Int flag) {
+    private PendingIntent getPendingIntent(Intent intent, int flag) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
                 return PendingIntent.getBroadcast(
                 context, reqCode, intent, PendingIntent.FLAG_MUTABLE | flag);

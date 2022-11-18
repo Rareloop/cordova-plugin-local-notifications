@@ -168,7 +168,7 @@ public final class Notification {
         return Type.SCHEDULED;
     }
 
-    private PendingIntent getPendingIntent(Intent intent, Int flag) {
+    private PendingIntent getPendingIntent(Intent intent, int flag) {
       int reqCode = random.nextInt();
       
       if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
