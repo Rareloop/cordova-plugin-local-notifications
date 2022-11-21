@@ -133,10 +133,10 @@ public final class Manager {
             importance = IMPORTANCE_LOW;
             shouldVibrate = true;
         } else {
-            defaultChannelId = Options.SILENT_CHANNEL_ID;
-            defaultChannelName = Options.SILENT_CHANNEL_NAME;
-            importance = IMPORTANCE_LOW;
-            shouldVibrate = false;
+            defaultChannelId = Options.DEFAULT_CHANNEL_ID;
+            defaultChannelName = "Default Channel";
+            importance = IMPORTANCE_HIGH;
+            shouldVibrate = true;
         }
 
         newChannelId = channelId != null ? channelId : defaultChannelId;
