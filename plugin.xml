@@ -186,6 +186,10 @@
         <source-file
             src="src/android/notification/receiver/AbstractTriggerReceiver.java"
             target-dir="src/de/appplant/cordova/plugin/notification/receiver" />
+        
+        <source-file
+            src="src/android/notification/receiver/NotificationTrampolineActivity.java"
+            target-dir="src/de/appplant/cordova/plugin/notification/receiver" />
 
         <source-file
             src="src/android/notification/trigger/DateTrigger.java"
@@ -205,6 +209,10 @@
 
         <source-file
             src="src/android/notification/util/AssetUtil.java"
+            target-dir="src/de/appplant/cordova/plugin/notification/util" />
+        
+        <source-file
+            src="src/android/notification/util/LaunchUtils.java"
             target-dir="src/de/appplant/cordova/plugin/notification/util" />
 
         <source-file
