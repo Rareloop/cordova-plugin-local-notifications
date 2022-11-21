@@ -2,6 +2,7 @@
  * Apache 2.0 License
  *
  * Copyright (c) Sebastian Katzer 2017
+ * Contributor Bhumin Bhandari
  *
  * This file contains Original Code and/or Modifications of Original Code
  * as defined in and that are subject to the Apache License
@@ -22,7 +23,7 @@
 package de.appplant.cordova.plugin.notification.action;
 
 import android.content.Context;
-import android.support.v4.app.RemoteInput;
+import androidx.core.app.RemoteInput;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

@@ -2,6 +2,7 @@
  * Apache 2.0 License
  *
  * Copyright (c) Sebastian Katzer 2017
+ * Contributor Bhumin Bhandari
  *
  * This file contains Original Code and/or Modifications of Original Code
  * as defined in and that are subject to the Apache License
@@ -304,6 +305,7 @@ public class MatchTrigger extends IntervalTrigger {
                 return false;
         }
 
+        cal.set(Calendar.SECOND, 0);
         cal.set(DAY_OF_WEEK, specials.get(0));
 
         if (matchers.get(3) != null && cal.get(Calendar.MONTH) != month)

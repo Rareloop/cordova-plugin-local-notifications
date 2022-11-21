@@ -5,3 +5,4 @@
 /src/windows/**/obj
 .idea
 src/cordova-plugin-local-notifications.iml
+.DS_Store

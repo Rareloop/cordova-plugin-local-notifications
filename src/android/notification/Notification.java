@@ -2,6 +2,7 @@
  * Apache 2.0 License
  *
  * Copyright (c) Sebastian Katzer 2017
+ * Contributor Bhumin Bhandari
  *
  * This file contains Original Code and/or Modifications of Original Code
  * as defined in and that are subject to the Apache License
@@ -30,9 +31,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.service.notification.StatusBarNotification;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.util.ArraySet;
-import android.support.v4.util.Pair;
+import android.util.Pair;
 import android.util.Log;
 import android.util.SparseArray;
 
@@ -44,17 +43,18 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import androidx.collection.ArraySet;
+import androidx.core.app.NotificationCompat;
 
 import static android.app.AlarmManager.RTC;
 import static android.app.AlarmManager.RTC_WAKEUP;
-import static android.app.PendingIntent.FLAG_CANCEL_CURRENT;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.M;
-import static android.support.v4.app.NotificationCompat.PRIORITY_HIGH;
-import static android.support.v4.app.NotificationManagerCompat.IMPORTANCE_MIN;
-import static android.support.v4.app.NotificationManagerCompat.IMPORTANCE_LOW;
-import static android.support.v4.app.NotificationManagerCompat.IMPORTANCE_MAX;
-import static android.support.v4.app.NotificationManagerCompat.IMPORTANCE_HIGH;
+import static androidx.core.app.NotificationCompat.PRIORITY_HIGH;
+import static androidx.core.app.NotificationCompat.PRIORITY_MAX;
+import static androidx.core.app.NotificationCompat.PRIORITY_MIN;
+
+import de.appplant.cordova.plugin.notification.util.LaunchUtils;
 
 /**
  * Wrapper class around OS notification class. Handles basic operations
@@ -168,16 +168,6 @@ public final class Notification {
         return Type.SCHEDULED;
     }
 
-    private PendingIntent getPendingIntent(Intent intent, int flag) {    
-      if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
-        return PendingIntent.getBroadcast(
-          context, 0, intent, flag | PendingIntent.FLAG_IMMUTABLE);
-      }
-
-      return PendingIntent.getBroadcast(
-          context, 0, intent, flag);
-    }
-
     /**
      * Schedule the local notification.
      *
@@ -228,19 +218,21 @@ public final class Notification {
 
             if (!date.after(new Date()) && trigger(intent, receiver))
                 continue;
-
-            PendingIntent pi = getPendingIntent(intent, FLAG_CANCEL_CURRENT);
+            int notificationId = options.getId();
+            PendingIntent pi =
+              LaunchUtils.getBroadcastPendingIntent(context, intent, notificationId);
 
             try {
                 switch (options.getPrio()) {
-                    case IMPORTANCE_MIN: case IMPORTANCE_LOW:
+                    case PRIORITY_MIN:
                         mgr.setExact(RTC, time, pi);
                         break;
-                    case IMPORTANCE_MAX: case IMPORTANCE_HIGH:
+                    case PRIORITY_MAX:
                         if (SDK_INT >= M) {
-                            mgr.setExactAndAllowWhileIdle(RTC_WAKEUP, time, pi);
+                            AlarmManager.AlarmClockInfo info = new AlarmManager.AlarmClockInfo(time, pi);
+                            mgr.setAlarmClock(info, pi);
                         } else {
-                            mgr.setExact(RTC, time, pi);
+                            mgr.setExact(RTC_WAKEUP, time, pi);
                         }
                         break;
                     default:
@@ -306,7 +298,8 @@ public final class Notification {
      */
     private void cancelScheduledAlarms() {
         SharedPreferences prefs = getPrefs(PREF_KEY_PID);
-        String id               = options.getIdentifier();
+        String id = options.getIdentifier();
+        int notificationId = options.getId();
         Set<String> actions     = prefs.getStringSet(id, null);
 
         if (actions == null)
@@ -314,9 +307,7 @@ public final class Notification {
 
         for (String action : actions) {
             Intent intent = new Intent(action);
-
-            PendingIntent pi = getPendingIntent(intent, 0);
-
+            PendingIntent pi = LaunchUtils.getBroadcastPendingIntent(context, intent, notificationId);
             if (pi != null) {
                 getAlarmMgr().cancel(pi);
             }
@@ -334,6 +325,8 @@ public final class Notification {
         }
 
         grantPermissionToPlaySoundFromExternal();
+        new NotificationVolumeManager(context, options)
+            .adjustAlarmVolume();
         getNotMgr().notify(getId(), builder.build());
     }
 
@@ -500,5 +493,3 @@ public final class Notification {
     }
 
 }
-
-   

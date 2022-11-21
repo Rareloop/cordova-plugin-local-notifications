@@ -2,6 +2,7 @@
  * Apache 2.0 License
  *
  * Copyright (c) Sebastian Katzer 2017
+ * Contributor Bhumin Bhandari
  *
  * This file contains Original Code and/or Modifications of Original Code
  * as defined in and that are subject to the Apache License
@@ -248,10 +249,6 @@ public final class AssetUtil {
     public int getResId(String resPath) {
         int resId = getResId(context.getResources(), resPath);
 
-        if (resId == 0) {
-            resId = getResId(Resources.getSystem(), resPath);
-        }
-
         return resId;
     }
 
@@ -317,7 +314,7 @@ public final class AssetUtil {
      */
     private File getTmpFile () {
         // If random UUID is not be enough see
-        // https://github.com/LukePulverenti/cordova-plugin-local-notifications/blob/267170db14044cbeff6f4c3c62d9b766b7a1dd62/src/android/notification/AssetUtil.java#L255
+        // https://github.com/LukePulverenti/cordova-plugin-local-notification/blob/267170db14044cbeff6f4c3c62d9b766b7a1dd62/src/android/notification/AssetUtil.java#L255
         return getTmpFile(UUID.randomUUID().toString());
     }
 

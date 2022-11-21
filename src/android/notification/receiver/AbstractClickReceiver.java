@@ -2,6 +2,7 @@
  * Apache 2.0 License
  *
  * Copyright (c) Sebastian Katzer 2017
+ * Contributor Bhumin Bhandari
  *
  * This file contains Original Code and/or Modifications of Original Code
  * as defined in and that are subject to the Apache License
@@ -21,7 +22,6 @@
 
 package de.appplant.cordova.plugin.notification.receiver;
 
-import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,8 +29,6 @@ import android.os.Bundle;
 import de.appplant.cordova.plugin.notification.Manager;
 import de.appplant.cordova.plugin.notification.Notification;
 
-import static android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
-import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
 import static de.appplant.cordova.plugin.notification.action.Action.CLICK_ACTION_ID;
 import static de.appplant.cordova.plugin.notification.action.Action.EXTRA_ID;
 
@@ -40,18 +38,20 @@ import static de.appplant.cordova.plugin.notification.action.Action.EXTRA_ID;
  */
 abstract public class AbstractClickReceiver extends NotificationTrampolineActivity {
 
-    // Holds a reference to the intent to handle.
-    private Intent intent;
-
     public AbstractClickReceiver() {
       super();
     }
 
-     /**
+    public void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      onHandleIntent(getIntent());
+    }
+
+    /**
      * Called when local notification was clicked to launch the main intent.
      */
     protected void onHandleIntent(Intent intent) {
-        this.intent        = intent;
+      // Holds a reference to the intent to handle.
 
         if (intent == null)
             return;
@@ -69,7 +69,6 @@ abstract public class AbstractClickReceiver extends NotificationTrampolineActivi
             return;
 
         onClick(toast, bundle);
-        this.intent = null;
     }
 
     /**
@@ -86,27 +85,4 @@ abstract public class AbstractClickReceiver extends NotificationTrampolineActivi
     protected String getAction() {
         return getIntent().getExtras().getString(EXTRA_ID, CLICK_ACTION_ID);
     }
-
-
-    /**
-     * Launch main intent from package.
-     */
-    protected void launchApp() {
-        Context context = getApplicationContext();
-        String pkgName  = context.getPackageName();
-
-        Intent intent = context
-                .getPackageManager()
-                .getLaunchIntentForPackage(pkgName);
-
-        if (intent == null)
-            return;
-
-        intent.addFlags(
-              FLAG_ACTIVITY_REORDER_TO_FRONT
-            | FLAG_ACTIVITY_SINGLE_TOP);
-
-        context.startActivity(intent);
-    }
-
 }

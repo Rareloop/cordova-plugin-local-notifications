@@ -2,6 +2,7 @@
  * Apache 2.0 License
  *
  * Copyright (c) Sebastian Katzer 2017
+ * Contributor Bhumin Bhandari
  *
  * This file contains Original Code and/or Modifications of Original Code
  * as defined in and that are subject to the Apache License
@@ -35,7 +36,7 @@ import de.appplant.cordova.plugin.notification.Options;
  * Abstract broadcast receiver for local notifications. Creates the
  * notification options and calls the event functions for further proceeding.
  */
-abstract public class AbstractTriggerReceiver extends BroadcastReceiver {
+abstract public class AbstractTriggerReceiver extends AbstractNotificationReceiver {
 
     /**
      * Called when an alarm was triggered.
