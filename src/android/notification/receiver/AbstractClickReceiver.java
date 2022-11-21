@@ -44,13 +44,12 @@ abstract public class AbstractClickReceiver extends NotificationTrampolineActivi
     private Intent intent;
 
     public AbstractClickReceiver() {
-        super("LocalNotificationClickReceiver");
+      super();
     }
 
-    /**
+     /**
      * Called when local notification was clicked to launch the main intent.
      */
-    @Override
     protected void onHandleIntent(Intent intent) {
         this.intent        = intent;
 
@@ -88,12 +87,6 @@ abstract public class AbstractClickReceiver extends NotificationTrampolineActivi
         return getIntent().getExtras().getString(EXTRA_ID, CLICK_ACTION_ID);
     }
 
-    /**
-     * Getter for the received intent.
-     */
-    protected Intent getIntent() {
-        return intent;
-    }
 
     /**
      * Launch main intent from package.

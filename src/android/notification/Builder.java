@@ -27,15 +27,16 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationCompat.MessagingStyle.Message;
-import android.support.v4.media.app.NotificationCompat.MediaStyle;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationCompat.MessagingStyle.Message;
+import androidx.media.app.NotificationCompat.MediaStyle;
 import android.support.v4.media.session.MediaSessionCompat;
 
 import java.util.List;
 import java.util.Random;
 
 import de.appplant.cordova.plugin.notification.action.Action;
+import de.appplant.cordova.plugin.notification.util.LaunchUtils;
 
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static de.appplant.cordova.plugin.notification.Notification.EXTRA_UPDATE;
@@ -324,6 +325,8 @@ public final class Builder {
             intent.putExtras(extras);
         }
 
+        int notificationId  = options.getId();
+
         PendingIntent deleteIntent =
           LaunchUtils.getBroadcastPendingIntent(context, intent, notificationId);
 
@@ -351,9 +354,9 @@ public final class Builder {
             intent.putExtras(extras);
         }
 
-        int reqCode = random.nextInt();
+        int notificationId  = options.getId();
 
-        LaunchUtils.getTaskStackPendingIntent(context, intent, notificationId);
+        PendingIntent contentIntent = LaunchUtils.getTaskStackPendingIntent(context, intent, notificationId);
 
         builder.setContentIntent(contentIntent);
     }
@@ -399,6 +402,7 @@ public final class Builder {
         if (extras != null) {
             intent.putExtras(extras);
         }
+        int notificationId  = options.getId();
 
         return LaunchUtils.getTaskStackPendingIntent(context, intent, notificationId);
     }
