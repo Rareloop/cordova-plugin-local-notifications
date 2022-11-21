@@ -400,7 +400,7 @@ public final class Builder {
             intent.putExtras(extras);
         }
 
-        return return LaunchUtils.getTaskStackPendingIntent(context, intent, notificationId);
+        return LaunchUtils.getTaskStackPendingIntent(context, intent, notificationId);
     }
 
     /**
